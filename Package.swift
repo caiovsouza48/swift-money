@@ -13,13 +13,13 @@ let package = Package(
         .visionOS(.v1),
     ],
     products: [
-        .library(name: "MonetaryValue", targets: ["MonetaryValue"]),
+        .library(name: "Money", targets: ["Money"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.4.3"),
     ],
     targets: [
-        .target(name: "MonetaryValue"),
-        .testTarget(name: "MoneyTests", dependencies: ["MonetaryValue"]),
+        .target(name: "Money"),
+        .testTarget(name: "MoneyTests", dependencies: ["Money"]),
     ]
 )
