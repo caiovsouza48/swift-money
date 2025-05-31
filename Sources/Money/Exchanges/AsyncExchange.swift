@@ -19,12 +19,12 @@ extension AsyncExchange {
     /// Attempts to convert the provided monetary value into the provided currency using
     /// the exchange's conversion rate.
     @inlinable public func trade<C: Currency>(
-        _ money: Money,
+        _ money: MonetaryValue,
         for currency: C
-    ) async throws -> Money {
+    ) async throws -> MonetaryValue {
         guard !currency.isEqual(to: money.currency) else { return money }
         let rate = try await rate(base: currency, quote: money.currency)
-        return Money(amount: money.amount / rate, currency: currency)
+        return MonetaryValue(amount: money.amount / rate, currency: currency)
     }
 
     /// Attempts to convert the provided aggregated monetary value into the provided currency
@@ -38,8 +38,8 @@ extension AsyncExchange {
     public func trade<C: Currency>(
         _ aggregatedMoney: AggregatedMoney,
         for currency: C
-    ) async throws -> Money {
-        var money = Money(amount: 0, currency: currency)
+    ) async throws -> MonetaryValue {
+        var money = MonetaryValue(amount: 0, currency: currency)
         for aggregatedCurrency in aggregatedMoney.currencies {
             guard let amount = aggregatedMoney[aggregatedCurrency] else {
                 continue

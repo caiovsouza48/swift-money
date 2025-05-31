@@ -69,23 +69,23 @@ public struct AggregatedMoney {
     /// Creates an aggregated monetary value from the provided amount
     /// and currency.
     @inlinable public init<C: Currency>(amount: Decimal, currency: C) {
-        self.init(money: Money(amount: amount, currency: currency))
+        self.init(money: MonetaryValue(amount: amount, currency: currency))
     }
 
     /// Creates an aggregated monetary value from the provided minor units and currency.
     @inlinable public init<C: Currency>(minorUnits: Int, currency: C) {
-        self.init(money: Money(minorUnits: minorUnits, currency: currency))
+        self.init(money: MonetaryValue(minorUnits: minorUnits, currency: currency))
     }
 
     /// Creates an aggregated monetary value with an amount equal to the summation of all the monetary
     /// values in the provided array.
-    @inlinable public init(money: Money...) {
+    @inlinable public init(money: MonetaryValue...) {
         self.init(money)
     }
 
     /// Creates an aggregated monetary value with an amount equal to the summation of all the monetary
     /// values in the provided sequence.
-    public init<S: Sequence<Money>>(_ s: S) {
+    public init<S: Sequence<MonetaryValue>>(_ s: S) {
         self.amounts = s.reduce(into: [:]) { amounts, money in
             amounts[Key(money.currency), default: 0] += money.amount
         }
@@ -163,7 +163,7 @@ extension AggregatedMoney {
     public func converted<C: Currency, E: Exchange>(
         to base: C,
         using exchange: E
-    ) throws -> Money {
+    ) throws -> MonetaryValue {
         try exchange.trade(self, for: base)
     }
 
@@ -201,7 +201,7 @@ extension AggregatedMoney {
     public func converted<C: Currency, E: AsyncExchange>(
         to base: C,
         using asyncExchange: E
-    ) async throws -> Money {
+    ) async throws -> MonetaryValue {
         try await asyncExchange.trade(self, for: base)
     }
 }
@@ -218,17 +218,17 @@ extension AggregatedMoney {
     }
 
     /// The sum of an aggregated monetary value and a monetary value.
-    @inlinable public static func + (lhs: Self, rhs: Money) -> Self {
+    @inlinable public static func + (lhs: Self, rhs: MonetaryValue) -> Self {
         lhs + AggregatedMoney(money: rhs)
     }
 
     /// The sum of a monetary value and an aggregated monetary value.
-    @inlinable public static func + (lhs: Money, rhs: Self) -> Self {
+    @inlinable public static func + (lhs: MonetaryValue, rhs: Self) -> Self {
         AggregatedMoney(money: lhs) + rhs
     }
 
     /// Adds a monetary value to an aggregated monetary value.
-    @inlinable public static func += (lhs: inout Self, rhs: Money) {
+    @inlinable public static func += (lhs: inout Self, rhs: MonetaryValue) {
         lhs = lhs + rhs
     }
 
@@ -250,17 +250,17 @@ extension AggregatedMoney {
     }
 
     /// The difference of an aggregated monetary value and a monetary value.
-    @inlinable public static func - (lhs: Self, rhs: Money) -> Self {
+    @inlinable public static func - (lhs: Self, rhs: MonetaryValue) -> Self {
         lhs - AggregatedMoney(money: rhs)
     }
 
     /// The difference of a monetary value and an aggregated monetary value.
-    @inlinable public static func - (lhs: Money, rhs: Self) -> Self {
+    @inlinable public static func - (lhs: MonetaryValue, rhs: Self) -> Self {
         AggregatedMoney(money: lhs) - rhs
     }
 
     /// Subtracts a monetary value from an aggregated monetary value.
-    @inlinable public static func -= (lhs: inout Self, rhs: Money) {
+    @inlinable public static func -= (lhs: inout Self, rhs: MonetaryValue) {
         lhs = lhs - rhs
     }
 
