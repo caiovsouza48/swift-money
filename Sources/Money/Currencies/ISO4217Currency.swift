@@ -561,7 +561,7 @@ extension ISO4217Currency {
     ///              with a new alphabetic code value, this initializer would return `nil`.
     ///
     /// - Parameter alphabeticCode: The alphabetic ISO 4217 currency code
-    @inlinable init?(alphabeticCode: String) {
+    @inlinable public init?(alphabeticCode: String) {
         switch alphabeticCode {
         case "AED": self = .AED
         case "AFN": self = .AFN
